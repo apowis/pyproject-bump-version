@@ -1,4 +1,4 @@
-name: "Version bumper"
+name: "pyproject.toml version bumper"
 description: "An action to bump versions of files"
 inputs:
   file_to_bump:
