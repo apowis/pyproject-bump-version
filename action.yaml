@@ -1,0 +1,54 @@
+name: "Version bumper"
+description: "An action to bump versions of files"
+inputs:
+  file_to_bump:
+    description: "The file path to version bumper"
+    required: true
+  bump_type:
+    description: "A minor or major version bumper"
+    required: true
+  main_branch:
+    description: "The name of the branch the PR is being made into"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name: pip install packaging toml
+      shell: "bash"
+      run: |
+        pip install --upgrade pip
+        pip install packaging toml
+
+    - name: version bump
+      id: version_bumped
+      shell: "bash"
+      run: |
+        # random file name
+        bump_commit_file=$(date | shasum | cut -d ' ' -f1)
+
+        python .github/actions/version-bumper/version_compare.py \
+          --main ${{ inputs.main_branch }} \
+          --bump_type ${{ inputs.bump_type }} \
+          --pyproject ${{ inputs.file_to_bump }} \
+          --bump_commit_file ${bump_commit_file}
+
+        # this file only exists if a version bump has happened
+        if [ -f ${bump_commit_file} ]
+        then
+          echo "bumped=`cat ${bump_commit_file}`" >> "$GITHUB_OUTPUT"
+          rm ${bump_commit_file}
+        else
+          echo "bumped=false" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Commit version bump
+      if: steps.version_bumped.outputs.bumped != 'false'
+      uses: EndBug/add-and-commit@v9
+      with:
+        message: ${{ steps.version_bumped.outputs.bumped }}
+        add: ${{ inputs.file_to_bump }}
