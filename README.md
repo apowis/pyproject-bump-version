@@ -38,7 +38,7 @@ jobs:
           fetch-depth: "0"
 
       - name: Version bumper
-        uses: "./.github/actions/version-bumper/"
+        uses: apowis/pyproject-bump-version@v0.0.1
         with:
           file_to_bump: "./pyproject.toml"
           bump_type: "minor"
