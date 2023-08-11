@@ -31,7 +31,7 @@ runs:
         # random file name
         bump_commit_file=$(date | shasum | cut -d ' ' -f1)
 
-        python .github/actions/version-bumper/version_compare.py \
+        python ./version_compare.py \
           --main ${{ inputs.main_branch }} \
           --bump_type ${{ inputs.bump_type }} \
           --pyproject ${{ inputs.file_to_bump }} \
