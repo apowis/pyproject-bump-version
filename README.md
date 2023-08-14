@@ -25,6 +25,7 @@ on:
       - main
     paths:
       - 'python_project/**'
+      - './pyproject.toml'
 
 jobs:
   bump-version:
@@ -51,5 +52,5 @@ jobs:
 - Document `version_compare.py` more and add some tests.
 - Add more options to EndBug/add-and-commit@v9 inputs
 - Add option to not merge or not depending on pull request merge status
-- Implememt more file types than pyproject.toml?
+- Implement more file types than pyproject.toml?
 - Long term, think about using npm stuff instead of Python scripts. Probably will never get to doing this.
