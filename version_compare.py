@@ -12,7 +12,7 @@ def get_main_version(project_file: Path, main_branch: Optional[str] = None) -> V
     Uses git cat-file to toml load the pyproject file and returns the verison number
     """
     main_branch = main_branch if main_branch else "main"
-    pyproject = check_output(["git", "cat-file", "blob", f"origin/main:./{project_file}"])
+    pyproject = check_output(["git", "cat-file", "blob", f"origin/{main_branch}:./{project_file}"])
     version_string = toml.loads(pyproject.decode())["project"]["version"]
     return parse(version_string)
 
